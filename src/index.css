@@ -146,6 +146,12 @@ h1 {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
+  flex-direction: column;
+}
+
+.task-form-row {
+  display: flex;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -171,6 +177,27 @@ select:focus {
   border-color: var(--accent);
 }
 
+textarea {
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  background: var(--card);
+  color: var(--text);
+  resize: vertical;
+}
+
+textarea:focus {
+  border-color: var(--accent);
+}
+
+.task-details-input {
+  width: 100%;
+  min-height: 72px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
 .status-select {
   cursor: pointer;
 }
@@ -183,8 +210,7 @@ ul {
 
 .todo-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
   background: var(--card);
   border: 1px solid var(--border);
@@ -192,6 +218,23 @@ ul {
   padding: 12px 16px;
   margin-bottom: 8px;
   flex-wrap: wrap;
+}
+
+.todo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.todo-details {
+  width: 100%;
+  min-height: 68px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .todo-main {

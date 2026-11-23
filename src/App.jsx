@@ -18,13 +18,16 @@ function App() {
 
     try {
       const parsedTasks = JSON.parse(savedTasks)
-      return Array.isArray(parsedTasks) ? parsedTasks : []
+      return Array.isArray(parsedTasks)
+        ? parsedTasks.map((task) => ({ ...task, details: task.details ?? '' }))
+        : []
     } catch {
       return []
     }
   })
 
   const [inputValue, setInputValue] = useState('')
+  const [detailsValue, setDetailsValue] = useState('')
 
   const [newTaskStatus, setNewTaskStatus] = useState(STATUSES[0].value)
 
@@ -50,11 +53,13 @@ function App() {
     const newTask = {
       id: Date.now(),
       text: inputValue,
+      details: detailsValue,
       status: newTaskStatus,
     }
 
     setTasks([...tasks, newTask])
     setInputValue('')
+    setDetailsValue('')
   }
 
   function handleDelete(id) {
@@ -65,6 +70,14 @@ function App() {
     setTasks(
       tasks.map((task) =>
         task.id === id ? { ...task, status: newStatus } : task,
+      ),
+    )
+  }
+
+  function handleDetailsChange(id, newDetails) {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, details: newDetails } : task,
       ),
     )
   }
@@ -80,31 +93,40 @@ function App() {
       <StatsBar total={total} completed={completed} remaining={remaining} />
 
       <div className="task-form">
-        <input
-          type="text"
-          placeholder="מה צריך לעשות?"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+        <div className="task-form-row">
+          <input
+            type="text"
+            placeholder="מה צריך לעשות?"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <select
+            className="status-select"
+            value={newTaskStatus}
+            onChange={(e) => setNewTaskStatus(e.target.value)}
+          >
+            {STATUSES.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          <button type="button" onClick={handleAdd}>
+            הוסף משימה
+          </button>
+        </div>
+        <textarea
+          className="task-details-input"
+          placeholder="פירוט או הסבר (אופציונלי)"
+          value={detailsValue}
+          onChange={(e) => setDetailsValue(e.target.value)}
         />
-        <select
-          className="status-select"
-          value={newTaskStatus}
-          onChange={(e) => setNewTaskStatus(e.target.value)}
-        >
-          {STATUSES.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <button type="button" onClick={handleAdd}>
-          הוסף משימה
-        </button>
       </div>
 
       <TaskList
         tasks={tasks}
         onStatusChange={handleStatusChange}
+        onDetailsChange={handleDetailsChange}
         onDelete={handleDelete}
       />
     </>
